@@ -277,18 +277,19 @@ def vos_tracking_video(video_state, interactive_state, mask_dropdown):
                                                                                                                                            interactive_state["positive_click_times"],
                                                                                                                                         interactive_state["negative_click_times"]))
 
-    if not os.path.exists('./result/cropped/{}'.format(video_state["video_name"].split('.')[0])):
-        os.makedirs('./result/cropped/{}'.format(video_state["video_name"].split('.')[0]))
-    kernel = np.ones((8, 8), np.uint8)
+    name = Path(video_state["video_name"]).name
+    dir_for_cropped = Path("./result") / "cropped" / name
+    if not dir_for_cropped.exists():
+        dir_for_cropped.mkdir(parents=True)
+    kernel_for_dilate = np.ones((8, 8), np.uint8)
     for i, (frame, mask) in enumerate(zip(video_state["origin_images"], video_state["masks"])):
         frame = frame.copy()
         frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
-        mask = cv2.dilate(mask, kernel, iterations=2)
+        mask = cv2.dilate(mask, kernel_for_dilate, iterations=2)
         frame_masked = cv2.bitwise_and(frame, frame, mask=mask)
         rect = cv2.boundingRect(mask)
         frame_cropped = frame_masked[rect[1]:rect[1]+rect[3], rect[0]:rect[0]+rect[2]]
-        name = Path(video_state["video_name"]).name
-        cv2.imwrite(os.path.join('./result/cropped/{}'.format(name), f"{name}_{i:06d}.png"), frame_cropped)
+        cv2.imwrite(dir_for_cropped / f"{name}_{i:06d}.png", frame_cropped)
 
 
 
