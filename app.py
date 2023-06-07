@@ -277,7 +277,7 @@ def vos_tracking_video(video_state, interactive_state, mask_dropdown):
                                                                                                                                            interactive_state["positive_click_times"],
                                                                                                                                         interactive_state["negative_click_times"]))
 
-    name = Path(video_state["video_name"]).name
+    name = Path(video_state["video_name"]).name.split(".")[0]
     dir_for_cropped = Path("./result") / "cropped" / name
     if not dir_for_cropped.exists():
         dir_for_cropped.mkdir(parents=True)
