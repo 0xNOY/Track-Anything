@@ -289,7 +289,7 @@ def vos_tracking_video(video_state, interactive_state, mask_dropdown):
         frame_masked = cv2.bitwise_and(frame, frame, mask=mask)
         rect = cv2.boundingRect(mask)
         frame_cropped = frame_masked[rect[1]:rect[1]+rect[3], rect[0]:rect[0]+rect[2]]
-        cv2.imwrite(dir_for_cropped / f"{name}_{i:06d}.png", frame_cropped)
+        cv2.imwrite(str(dir_for_cropped / f"{name}_{i:06d}.png"), frame_cropped)
 
 
 
