@@ -276,6 +276,18 @@ def vos_tracking_video(video_state, interactive_state, mask_dropdown):
                                                                                                                                            interactive_state["positive_click_times"],
                                                                                                                                         interactive_state["negative_click_times"]))
 
+    if not os.path.exists('./result/cropped/{}'.format(video_state["video_name"].split('.')[0])):
+        os.makedirs('./result/cropped/{}'.format(video_state["video_name"].split('.')[0]))
+    kernel = np.ones((8, 8), np.uint8)
+    for i, (frame, mask) in enumerate(zip(video_state["origin_images"], video_state["masks"])):
+        mask = cv2.dilate(mask, kernel, iterations=8)
+        frame_masked = cv2.bitwise_and(frame, frame, mask=mask)
+        rect = cv2.boundingRect(mask)
+        frame_cropped = frame_masked[rect[1]:rect[1]+rect[3], rect[0]:rect[0]+rect[2]]
+        cv2.imwrite(os.path.join('./result/cropped/{}'.format(video_state["video_name"].split('.')[0]), f"{video_state['video_name']}_{i:6d}.png"), frame_cropped)
+
+
+
     #### shanggao code for mask save
     if interactive_state["mask_save"]:
         if not os.path.exists('./result/mask/{}'.format(video_state["video_name"].split('.')[0])):
@@ -378,14 +390,14 @@ SAM_checkpoint = download_checkpoint(sam_checkpoint_url, folder, sam_checkpoint)
 xmem_checkpoint = download_checkpoint(xmem_checkpoint_url, folder, xmem_checkpoint)
 e2fgvi_checkpoint = download_checkpoint_from_google_drive(e2fgvi_checkpoint_id, folder, e2fgvi_checkpoint)
 args.port = 12212
-args.device = "cuda:3"
+args.device = "cuda:1"
 # args.mask_save = True
 
 # initialize sam, xmem, e2fgvi models
 model = TrackingAnything(SAM_checkpoint, xmem_checkpoint, e2fgvi_checkpoint,args)
 
 
-title = """<p><h1 align="center">Track-Anything</h1></p>
+title = """<p><h1 align="center">Crop-Anything</h1></p>
     """
 description = """<p>Gradio demo for Track Anything, a flexible and interactive tool for video object tracking, segmentation, and inpainting. I To use it, simply upload your video, or click one of the examples to load them. Code: <a href="https://github.com/gaomingqi/Track-Anything">https://github.com/gaomingqi/Track-Anything</a> <a href="https://huggingface.co/spaces/watchtowerss/Track-Anything?duplicate=true"><img style="display: inline; margin-top: 0em; margin-bottom: 0em" src="https://bit.ly/3gLdBN6" alt="Duplicate Space" /></a></p>"""
 
