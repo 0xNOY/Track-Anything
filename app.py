@@ -289,7 +289,14 @@ def vos_tracking_video(video_state, interactive_state, mask_dropdown):
         frame_masked = cv2.bitwise_and(frame, frame, mask=mask)
         rect = cv2.boundingRect(mask)
         frame_cropped = frame_masked[rect[1]:rect[1]+rect[3], rect[0]:rect[0]+rect[2]]
-        cv2.imwrite(str(dir_for_cropped / f"{name}_{i:06d}.png"), frame_cropped)
+        if frame_cropped is None or len(frame_cropped) < 1 or frame_cropped.shape[0] < 1 or frame_cropped.shape[1] < 1:
+            continue
+        try:
+            cv2.imwrite(str(dir_for_cropped / f"{name}_{i:06d}.png"), frame_cropped)
+        except Exception as e:
+            print(f"Error in saving cropped image: {e}")
+            continue
+
 
 
 
