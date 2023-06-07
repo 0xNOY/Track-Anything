@@ -280,7 +280,9 @@ def vos_tracking_video(video_state, interactive_state, mask_dropdown):
         os.makedirs('./result/cropped/{}'.format(video_state["video_name"].split('.')[0]))
     kernel = np.ones((8, 8), np.uint8)
     for i, (frame, mask) in enumerate(zip(video_state["origin_images"], video_state["masks"])):
-        mask = cv2.dilate(mask, kernel, iterations=8)
+        frame = frame.copy()
+        frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+        mask = cv2.dilate(mask, kernel, iterations=2)
         frame_masked = cv2.bitwise_and(frame, frame, mask=mask)
         rect = cv2.boundingRect(mask)
         frame_cropped = frame_masked[rect[1]:rect[1]+rect[3], rect[0]:rect[0]+rect[2]]
