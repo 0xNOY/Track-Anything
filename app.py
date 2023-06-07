@@ -1,4 +1,5 @@
 import gradio as gr
+from pathlib import Path
 import argparse
 import gdown
 import cv2
@@ -286,7 +287,8 @@ def vos_tracking_video(video_state, interactive_state, mask_dropdown):
         frame_masked = cv2.bitwise_and(frame, frame, mask=mask)
         rect = cv2.boundingRect(mask)
         frame_cropped = frame_masked[rect[1]:rect[1]+rect[3], rect[0]:rect[0]+rect[2]]
-        cv2.imwrite(os.path.join('./result/cropped/{}'.format(video_state["video_name"].split('.')[0]), f"{video_state['video_name']}_{i:06d}.png"), frame_cropped)
+        name = Path(video_state["video_name"]).name
+        cv2.imwrite(os.path.join('./result/cropped/{}'.format(name), f"{name}_{i:06d}.png"), frame_cropped)
 
 
 
