@@ -7,8 +7,8 @@ import numpy as np
 import os
 import sys
 
-sys.path.append(Path(__file__).parent.absolute() / "tracker")
-sys.path.append(Path(__file__).parent.absolute() / "tracker/model")
+sys.path.append(str(Path(__file__).parent.absolute() / "tracker"))
+sys.path.append(str(Path(__file__).parent.absolute() / "tracker/model"))
 
 from track_anything import TrackingAnything
 from track_anything import parse_augment
