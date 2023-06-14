@@ -1,4 +1,11 @@
+import sys
+from pathlib import Path
+
 import numpy as np
+
+sys.path.append(str(Path(__file__).parent.absolute() / "tracker"))
+sys.path.append(str(Path(__file__).parent.absolute() / "tracker/model"))
+
 from tools.interact_tools import SamControler
 from tqdm import tqdm
 from tracker.base_tracker import BaseTracker
