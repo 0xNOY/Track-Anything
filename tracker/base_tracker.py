@@ -30,7 +30,9 @@ class BaseTracker:
         xmem_checkpoint: checkpoint of XMem model
         """
         # load configurations
-        with open(Path(__file__) / "tracker" / "config" / "config.yaml", "r") as stream:
+        with open(
+            Path(__file__).parent / "tracker" / "config" / "config.yaml", "r"
+        ) as stream:
             config = yaml.safe_load(stream)
         # initialise XMem
         network = XMem(config, xmem_checkpoint).to(device).eval()
